@@ -31,3 +31,26 @@
 .carousel-indicators li {
   background-color: rgba(0, 0, 0, 0.5); /* Change the inactive dot color */
 }
+
+.form-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: gray;
+  min-height: 100vh;
+}
+
+.form-body{
+  background-color: white;
+  padding: 3rem;
+  border-radius: 1%;
+  width: 65%;
+}
+
+.form-heading{
+  font-size: large;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 25px;
+}
+

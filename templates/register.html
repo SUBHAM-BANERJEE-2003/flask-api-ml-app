@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Subham Real Estate</title>
+  <link rel="icon" type="image/x-icon" href="/static/R.jpg">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/customstyles.css">
+</head>
+<body>
+    {% include 'header.html' %}
+    <div class="form-container">
+        <div class="form-body">
+            <form>
+                <h2 class="form-heading">Register for this website</h2>
+                <div class="mb-3">
+                    <label for="username" class="form-label">Enter your username:</label>
+                    <input type="text" class="form-control" id="username">
+                </div>
+                <label for="exampleInputEmail1" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="email" aria-describedby="emailHelp">
+                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+              <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Enter new Password:</label>
+                <input type="password" class="form-control" id="pass">
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Re-enter your new Password</label>
+                <input type="password" class="form-control" id="repass">
+              </div>
+             <div class="mb-3">
+                <label for="age" class="form-label">Enter your age: </label>
+                <input type="number" class="form-control" id="age">
+             </div>
+             <div><button type="submit" class="btn btn-primary mt-3">Submit</button></form></div>
+            </form>
+        </div>
+    </div>
+    {% include 'footer.html' %}
+</body>
+</html>
