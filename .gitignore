@@ -1,5 +1,4 @@
-flask
-Include
-Lib
-Scripts
 pyvenv.cfg
+__pycache__
+instance
+flask
