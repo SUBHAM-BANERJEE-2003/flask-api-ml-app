@@ -16,9 +16,15 @@
   <div class="form-container">
     <div class="form-body">
       <form method="POST">
-        {% for error in form.username.errors %}
-        <div class="error-message">{{ error }}</div>
-        {% endfor %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}" style="color: red;">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
         <h2 class="form-heading">Login for this website</h2>
         <div class="mb-3">
           <label for="username" class="form-label">Enter your username:</label>

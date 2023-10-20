@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash, redirect, url_for,request
+from flask import Flask, render_template, flash, redirect, url_for,request,session
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from flask_wtf import FlaskForm
@@ -23,6 +23,7 @@ class User(db.Model, UserMixin):
     def __repr__(self) -> str:
         return '<Name %r>' % self.username
 
+
 class RegisterForm(FlaskForm):
     username = StringField('Username', validators=[InputRequired(), Length(min=4, max=20)])
     email = EmailField('Email', validators=[InputRequired(), Email()])
@@ -39,7 +40,8 @@ class LoginForm(FlaskForm):
 
 @app.route("/")
 def homePage():
-    return render_template('index.html')
+    username = session.get('username')
+    return render_template('index.html', username=username)
 
 @app.route("/about")
 def aboutPage():
@@ -48,11 +50,35 @@ def aboutPage():
 @app.route("/login", methods=['GET', 'POST'])
 def loginPage():
     form = LoginForm()
-    if form.validate_on_submit():
-        # Check username and password, and perform login logic
-        flash('Login successful', 'success')
-        return redirect(url_for('homePage'))
+    if request.method == "POST":
+        username = request.form.get("username")
+        email = request.form.get("email")
+        password = request.form.get("password")
+
+        existing_user = User.query.filter_by(username=username).first()
+        existing_email = User.query.filter_by(email=email).first()
+        
+        if not existing_user or not existing_email:
+            flash('Invalid username or email', 'error')
+            return redirect(url_for('loginPage'))
+
+        if bcrypt.check_password_hash(existing_user.password, password):
+            session['username'] = username
+            flash('Login successful', 'success')
+            return redirect(url_for('homePage'))
+        else:
+            flash('Invalid password', 'error')
+            return redirect(url_for('loginPage'))
+
     return render_template('login.html', form=form)
+
+# Add a route to log out
+@app.route("/logout")
+def logout():
+    # Remove the username from the session
+    session.pop('username', None)
+    flash('Logged out successfully', 'success')
+    return redirect(url_for('homePage'))
 
 @app.route("/register", methods=["GET", "POST"])
 def registerPage():
