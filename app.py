@@ -1,10 +1,11 @@
-from flask import Flask, render_template, flash, redirect, url_for,request,session
+from flask import Flask, render_template, flash, redirect, url_for,request,session,jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, EmailField, IntegerField
 from wtforms.validators import InputRequired, Length, Email, NumberRange, EqualTo
 from flask_bcrypt import Bcrypt
+from model import RealEstateModel
 
 app = Flask(__name__)
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:1234@localhost/realestate'
@@ -106,6 +107,14 @@ def registerPage():
             return redirect(url_for("loginPage"))
     return render_template('register.html', form=form)
 
+model = RealEstateModel()
+@app.route("/predict", methods=["GET", "POST"])
+def predictPrice():
+     data = request.get_json()
+     input_data = data['input_data']
+    # Use the model to make predictions
+     prediction = model.predict(input_data)
+     return jsonify({'prediction': prediction.tolist()})
 
 @app.cli.command("create_tables")
 def create_tables():
