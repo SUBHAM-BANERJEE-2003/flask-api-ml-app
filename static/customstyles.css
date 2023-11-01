@@ -1,0 +1,56 @@
+.mylogo{
+    height: 23px ;
+    width: 23px ;
+    margin-right: 5px;
+}
+
+.carousel {
+    max-width: 1400px;
+  }
+  /* Reduce the width of the carousel */
+  .carousel-inner {
+    max-width: 500px; /* Adjust the value as needed */
+    margin: 0 auto; /* Center the carousel horizontally */
+  }
+
+  .carousel-item img {
+    max-width: 100%; /* Adjust the value as needed */
+    max-height: 100%; /* Adjust the value as needed */
+  }
+
+  .carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: black; /* Change the arrow color */
+}
+
+/* Change the color of the carousel navigation dots to black */
+.carousel-indicators .active {
+  background-color: black; /* Change the active dot color */
+}
+
+.carousel-indicators li {
+  background-color: rgba(0, 0, 0, 0.5); /* Change the inactive dot color */
+}
+
+.form-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: gray;
+  min-height: 100vh;
+}
+
+.form-body{
+  background-color: white;
+  padding: 3rem;
+  border-radius: 1%;
+  width: 65%;
+}
+
+.form-heading{
+  font-size: large;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 25px;
+}
+

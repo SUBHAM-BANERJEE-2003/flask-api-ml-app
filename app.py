@@ -81,6 +81,10 @@ def logout():
     flash('Logged out successfully', 'success')
     return redirect(url_for('homePage'))
 
+@app.route("/property")
+def propertyPage():
+    return render_template('property-grid.html')
+
 @app.route("/register", methods=["GET", "POST"])
 def registerPage():
     form = RegisterForm()
@@ -107,14 +111,14 @@ def registerPage():
             return redirect(url_for("loginPage"))
     return render_template('register.html', form=form)
 
-model = RealEstateModel()
-@app.route("/predict", methods=["GET", "POST"])
-def predictPrice():
-     data = request.get_json()
-     input_data = data['input_data']
-    # Use the model to make predictions
-     prediction = model.predict(input_data)
-     return jsonify({'prediction': prediction.tolist()})
+# model = RealEstateModel()
+# @app.route("/predict", methods=["GET", "POST"])
+# def predictPrice():
+#      data = request.get_json()
+#      input_data = data['input_data']
+#     # Use the model to make predictions
+#      prediction = model.predict(input_data)
+#      return jsonify({'prediction': prediction.tolist()})
 
 @app.cli.command("create_tables")
 def create_tables():
