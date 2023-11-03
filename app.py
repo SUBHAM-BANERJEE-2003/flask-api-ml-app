@@ -167,6 +167,7 @@ model = RealEstateModel()
 def predictPrice():
     form = predictionForm()
     my_list = []
+    finalprediction = 0
     if request.method == 'POST':
         baths = int(request.form.get("baths"))
         balcony = int(request.form.get("balcony"))
