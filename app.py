@@ -2,7 +2,7 @@ from flask import Flask, render_template, flash, redirect, url_for,request,sessi
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, EmailField, IntegerField
+from wtforms import StringField, PasswordField, SubmitField, EmailField, IntegerField, SelectField
 from wtforms.validators import InputRequired, Length, Email, NumberRange, EqualTo
 from flask_bcrypt import Bcrypt
 from model import RealEstateModel
@@ -38,6 +38,31 @@ class LoginForm(FlaskForm):
      email = EmailField(validators=[InputRequired(), Email()], render_kw={"placeholder": "Enter your email"})
      password = PasswordField(validators=[InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Enter your Password"})
      submit = SubmitField('Submit')
+
+class predictionForm(FlaskForm):
+    baths = IntegerField('Bathrooms', validators=[NumberRange(min=1, max=100)])
+    balcony = SelectField('Property Type', choices=[
+    (0, 'No'),
+    (1, 'Yes'),
+])
+    total_area = IntegerField('Total Area', validators=[NumberRange(min=1, max=10000)])
+    price_per_sqft = IntegerField('Price per sqft', validators=[NumberRange(min=1, max=1000000)])
+    city = SelectField('City', choices=[
+    (0, 'Bangalore'),
+    (1, 'Chennai'),
+    (2, 'Delhi'),
+    (3, 'Hyderabad'),
+    (4, 'Kolkata'),
+    (5, 'Mumbai'),
+    (6, 'Pune'),
+    (7, 'Thane')
+])
+    property_type = SelectField('Property Type', choices=[
+    (0, 'Flat'),
+    (1, 'Independent House'),
+    (2, 'Villa')
+])
+    submit = SubmitField('Predict')
 
 @app.route("/")
 def homePage():
@@ -111,9 +136,55 @@ def registerPage():
             return redirect(url_for("loginPage"))
     return render_template('register.html', form=form)
 
-# model = RealEstateModel()
-# @app.route("/predict", methods=["GET", "POST"])
-# def predictPrice():
+def citydecoder(city):
+    if city == 0:
+        return [1,0,0,0,0,0,0,0]
+    elif city == 1:
+        return [0,1,0,0,0,0,0,0]
+    elif city == 2:
+        return [0,0,1,0,0,0,0,0]
+    elif city == 3:
+        return [0,0,0,1,0,0,0,0]
+    elif city == 4:
+        return [0,0,0,0,1,0,0,0]
+    elif city == 5:
+        return [0,0,0,0,0,1,0,0]
+    elif city == 6:
+        return [0,0,0,0,0,0,1,0]
+    else:
+        return [0,0,0,0,0,0,0,1]
+
+def propertydecoder(property_type):
+    if property_type == 0:
+        return [1,0,0]
+    elif property_type == 1:
+        return [0,1,0]
+    else:
+        return [0,0,1]
+
+model = RealEstateModel()
+@app.route("/predict", methods=["GET", "POST"])
+def predictPrice():
+    form = predictionForm()
+    my_list = []
+    if request.method == 'POST':
+        baths = int(request.form.get("baths"))
+        balcony = int(request.form.get("balcony"))
+        total_area = int(request.form.get("total_area"))
+        price_per_sqft = int(request.form.get("price_per_sqft"))
+        city = int(request.form.get("city"))
+        property_type = int(request.form.get("property_type"))
+        city_decoded = citydecoder(city)
+        my_list = [baths, balcony, total_area, price_per_sqft]
+        my_list.extend(city_decoded)
+        property_type_decoded = propertydecoder(property_type)
+        my_list.extend(property_type_decoded)
+        print(my_list)
+        prediction = model.predict([my_list])
+        finalprediction = prediction[-1]*100000
+        print(prediction)
+        # return redirect(url_for("homePage"))
+    return render_template('predict.html', form=form,prediction_result=finalprediction)
 #      data = request.get_json()
 #      input_data = data['input_data']
 #     # Use the model to make predictions
